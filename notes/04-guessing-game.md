@@ -172,4 +172,63 @@ The above code doesn't compile due to mismatched types so we do this:
     }
 ```
 
+Finally we must loop through so that the user can guess multiple times.
 
+```rust
+    // --snip--
+
+    println!("The secret number is: {secret_number}");
+
+    loop {
+        println!("Please input your guess.");
+
+        // --snip--
+
+        match guess.cmp(&secret_number) {
+            Ordering::Less => println!("Too small!"),
+            Ordering::Greater => println!("Too big!"),
+            Ordering::Equal => println!("You win!"),
+        }
+    }
+}
+```
+
+We must also add a feature that would allow users to quit after a correct guess.
+
+```rust
+        // --snip--
+
+        match guess.cmp(&secret_number) {
+            Ordering::Less => println!("Too small!"),
+            Ordering::Greater => println!("Too big!"),
+            Ordering::Equal => {
+                println!("You win!");
+                break;
+            }
+        }
+    }
+}
+```
+
+We just added a break statement to break the loop just like we do in C.
+
+Now finally we must handle invalid output.
+
+```rust
+        // --snip--
+
+        io::stdin()
+            .read_line(&mut guess)
+            .expect("Failed to read line");
+
+        let guess: u32 = match guess.trim().parse() {
+            Ok(num) => num,
+            Err(_) => continue,
+        };
+
+        println!("You guessed: {guess}");
+
+        // --snip--
+```
+
+Here we just ignore an input which is not a number and go to the next guess, without crashing.
