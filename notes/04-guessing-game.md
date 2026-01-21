@@ -77,3 +77,55 @@ When printing the result of evaluating an expression, place empty curly brackets
 
 Very similar to C, in which we use `%`, but here we don't have letters.
 
+## Random numbers
+
+Now for the guessing game to be playable we must get a random number. For that we need an external library, in rust we call these things crates. We can import crates with cargo, by simply adding them to the toml file.
+
+```toml
+[dependencies]
+rand = "0.8.5"
+```
+
+Then we build to get the packages.
+
+---
+
+Your project will remain at 0.8.5 until you explicitly upgrade, thanks to the Cargo.lock file.
+
+---
+
+To update crates you can use the command:
+
+```bash
+cargo update
+```
+
+### Using rand
+
+```rust
+use std::io;
+
+use rand::Rng;
+
+fn main() {
+    println!("Guess the number!");
+
+    let secret_number = rand::thread_rng().gen_range(1..=100);
+
+    println!("The secret number is: {secret_number}");
+
+    println!("Please input your guess.");
+
+    let mut guess = String::new();
+
+    io::stdin()
+        .read_line(&mut guess)
+        .expect("Failed to read line");
+
+    println!("You guessed: {guess}");
+}
+```
+
+The `Rng` trait defines methods that random number generators implement, and this trait must be in scope for us to use those methods.
+
+
